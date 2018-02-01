@@ -1,4 +1,8 @@
 data
 .ipynb_checkpoints/
-
 submissions
+plan
+terraform.tfstate*
+config.tfvars
+.idea
+.terraform
