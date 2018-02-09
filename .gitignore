@@ -8,3 +8,4 @@ config.tfvars
 .terraform
 __pycache__
 external-models
+tensorboard
