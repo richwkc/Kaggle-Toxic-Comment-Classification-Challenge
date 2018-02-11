@@ -84,6 +84,6 @@ resource "aws_instance" "jupyter" {
   }
 }
 
-output "ip" {
-  value = "${aws_instance.jupyter.public_ip}"
+output "ssh-and-forward-jupyter-notebook-port" {
+  value = "ssh -i ~/.ssh/spark_key.pem ubuntu@${aws_instance.jupyter.public_ip} -L 8888:localhost:8888"
 }

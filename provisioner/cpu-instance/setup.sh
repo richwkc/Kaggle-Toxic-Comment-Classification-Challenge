@@ -2,6 +2,9 @@
 
 set -e
 
+# Set english locale
+sudo locale-gen en_CA.UTF-8
+
 # Installs anaconda
 wget https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
 chmod +x Anaconda3-5.0.1-Linux-x86_64.sh
@@ -17,6 +20,16 @@ conda install -y pandas scikit-learn scipy gensim tensorflow
 # htop for better monitoring
 sudo apt-get install htop
 
-# Download google word2vec model
-wget -O "/home/ubuntu/GoogleNews-vectors-negative300.bin.gz" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/GoogleNews-vectors-negative300.bin.gz"
-(cd /home/ubuntu && gunzip "GoogleNews-vectors-negative300.bin.gz")
+# Download data-sets and w2v model
+mkdir "/home/ubuntu/state"
+mkdir "/home/ubuntu/state/data"
+mkdir "/home/ubuntu/state/data/preprocessed-train-test"
+mkdir "/home/ubuntu/state/external-models"
+mkdir "/home/ubuntu/state/external-models/glove.6B"
+
+wget -O "/home/ubuntu/state/data/preprocessed-train-test/all.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/all.csv"
+wget -O "/home/ubuntu/state/data/preprocessed-train-test/train.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/train.csv"
+wget -O "/home/ubuntu/state/data/preprocessed-train-test/test.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/test.csv"
+wget -O "/home/ubuntu/state/data/preprocessed-train-test/contest-test.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/contest-test.csv"
+
+wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.50.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/w2v.glove.6B.50.txt"
