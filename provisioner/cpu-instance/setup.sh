@@ -15,7 +15,7 @@ echo 'export PATH=~/anaconda3/bin:$PATH' >> ~/.bashrc
 export PATH=~/anaconda3/bin:$PATH
 
 # Install common libraries
-conda install -y pandas scikit-learn scipy gensim tensorflow
+conda install -y pandas scikit-learn scipy gensim tensorflow keras
 
 # htop for better monitoring
 sudo apt-get install htop
