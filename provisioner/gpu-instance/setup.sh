@@ -6,7 +6,7 @@ set -e
 sudo locale-gen en_CA.UTF-8
 
 # Install common libraries
-(cd /home/ubuntu && source /home/ubuntu/anaconda3/bin//activate tensorflow_p36 && pip install gensim)
+(cd /home/ubuntu && source /home/ubuntu/anaconda3/bin//activate tensorflow_p36 && pip install gensim sklearn)
 
 # htop for better monitoring
 sudo apt-get install htop
