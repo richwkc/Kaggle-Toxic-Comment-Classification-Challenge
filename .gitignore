@@ -9,4 +9,4 @@ config.tfvars
 __pycache__
 external-models
 tensorboard
-tb-logs
+tb-logs*

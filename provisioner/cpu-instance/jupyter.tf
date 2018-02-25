@@ -84,10 +84,7 @@ resource "aws_instance" "jupyter" {
   }
 
   provisioner "remote-exec" {
-    inline = [
-      "chmod +x /home/ubuntu/setup.sh",
-      "/home/ubuntu/setup.sh"
-    ]
+    inline = ["chmod +x /home/ubuntu/setup.sh"]
   }
 }
 

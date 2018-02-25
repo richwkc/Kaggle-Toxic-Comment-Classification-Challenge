@@ -32,4 +32,7 @@ wget -O "/home/ubuntu/state/data/preprocessed-train-test/train.csv" "https://s3-
 wget -O "/home/ubuntu/state/data/preprocessed-train-test/test.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/test.csv"
 wget -O "/home/ubuntu/state/data/preprocessed-train-test/contest-test.csv" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/data/contest-test.csv"
 
-wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.50.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/w2v.glove.6B.50.txt"
+wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.50.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.50.txt"
+wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.100.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.100.txt"
+wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.200.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.200.txt"
+wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.300.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.300.txt"

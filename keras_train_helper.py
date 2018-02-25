@@ -21,12 +21,12 @@ def rotateTensorboardLogs():
 class PrintAucCallback(Callback):
     def __init__(self, sentences, labels, printPerBatches=None):
         np.random.seed(64563)
-        tenthOfCount = int(sentences.shape[0] / 10)
+        tenthOfCount = int(sentences.shape[0] / 5)
         
         self.testData = [sentences, labels]
-        self.smallTestData = [
-            sentences[np.random.choice(sentences.shape[0], tenthOfCount, replace=False)], 
-            labels[np.random.choice(labels.shape[0], tenthOfCount, replace=False)] ]
+
+	samples = np.random.choice(sentences.shape[0], tenthOfCount, replace=False)
+        self.smallTestData = [sentences[samples], labels[samples]]
         self.printPerBatches = printPerBatches
         self.listOfAucs = []
 
