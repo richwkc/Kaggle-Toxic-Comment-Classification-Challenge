@@ -18,12 +18,12 @@ def rotateTensorboardLogs():
 class PrintAucCallback(Callback):
     def __init__(self, sentences, labels, printPerBatches=None):
         self.testData = [sentences, labels]
-        self.batchCount = 0
+        self.smallTestData = [sentences[:int(sentences.shape[0] / 10)], labels[:int(labels.shape[0] / 10)]]
         self.printPerBatches = printPerBatches
         self.listOfAucs = []
 
-    def computeAuc(self):
-        sentences, labels = self.testData            
+    def computeAuc(self, small=False):
+        sentences, labels = self.smallTestData if small else self.testData
         predictions = self.model.predict(sentences)
         return roc_auc_score(labels[:, 1], predictions[:, 1])
         
@@ -31,11 +31,11 @@ class PrintAucCallback(Callback):
         print(" - auc: {:.4f}".format(auc))
         
     def on_batch_end(self, batch, logs={}):
-        self.batchCount += 1
-        if self.printPerBatches and self.batchCount % self.printPerBatches == 0:
+        if self.printPerBatches and (batch + 1) % self.printPerBatches == 0:
             self.printAuc(self.computeAuc())
     
     def on_epoch_end(self, epoch, logs={}):
-        auc = self.computeAuc()
+        auc = self.computeAuc() if (epoch + 1) % 5 == 0 else self.computeAuc(small=True)
         self.printAuc(auc)
         self.listOfAucs.append((epoch + 1, auc))
+        
