@@ -35,6 +35,3 @@ wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.200.txt" "http
 wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.300.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.300.txt"
 wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.840B.300d.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.840B.300d.txt"
 
-# htop for better monitoring
-sudo apt-get install htop
-

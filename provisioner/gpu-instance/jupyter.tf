@@ -2,6 +2,7 @@ variable "instance_type" {}
 variable "project_directory" {}
 variable "region" {}
 variable "vpc_id" {}
+variable "spot_price" {}
 
 provider "aws" {
   region = "${var.region}"
@@ -44,11 +45,14 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-resource "aws_instance" "jupyter" {
+resource "aws_spot_instance_request" "jupyter" {
+  spot_price = "${var.spot_price}"
+
   ami = "${data.aws_ami.deep_learning.id}"
   instance_type = "${var.instance_type}"
   key_name = "spark_key"
   security_groups = ["${aws_security_group.allow_ssh.name}"]
+  wait_for_fulfillment = true
 
   ebs_block_device {
     volume_type = "gp2"
@@ -85,5 +89,5 @@ resource "aws_instance" "jupyter" {
 }
 
 output "ssh-and-forward-jupyter-notebook-port" {
-  value = "ssh -i ~/.ssh/spark_key.pem ubuntu@${aws_instance.jupyter.public_ip} -L 8888:localhost:8888"
+  value = "ssh -i ~/.ssh/spark_key.pem ubuntu@${aws_spot_instance_request.jupyter.public_ip} -L 8888:localhost:8888"
 }
