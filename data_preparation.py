@@ -48,8 +48,8 @@ class Word2Int(BaseEstimator, TransformerMixin):
         return X.apply(lambda sentence: [self.w2i[word] for word in sentence])
 
 class Word2Vec:
-    def __init__(self, embeddingName, allWords, i2w, seed=None):
-        self.dictionary = set([word for sentence in allWords for word in sentence])
+    def __init__(self, embeddingName, i2w, seed=None):
+        self.dictionary = set([word for word in i2w.values()])
         self.i2w = i2w
         if seed:
             np.random.seed(seed)
