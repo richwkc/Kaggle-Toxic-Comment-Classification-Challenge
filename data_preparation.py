@@ -3,7 +3,7 @@ import numpy as np
 from os import path
 from sklearn.preprocessing import LabelEncoder
 from sklearn.base import BaseEstimator, TransformerMixin
-import gensim
+from gensim.models.keyedvectors import KeyedVectors
 
 def loadData():
     print("Loading datasets...")
@@ -57,7 +57,7 @@ class Word2Vec:
         print("Loading word2vec dictionary...")
         if embeddingName == "webcrawl":
             self.dimensions = 300
-            self.embedding = self.__loadw2vModel__("../state/external-models/glove.6B/w2v.glove.840B.300d.txt")
+            self.embedding = self.__loadw2vModel__("../state/external-models/glove.6B/webcrawl.bin")
         elif embeddingName in [50, 100, 200, 300]:
             self.dimensions = embeddingName
             self.embedding = self.__loadGlovew2v__(embeddingName)
@@ -65,13 +65,10 @@ class Word2Vec:
             raise "Invalid word embedding name"
 
     def __loadw2vModel__(self, filepath):
-        return (gensim
-        .models
-        .KeyedVectors
-        .load_word2vec_format(filepath))
+        return KeyedVectors.load(filepath, mmap="r")
 
     def __loadGlovew2v__(self, ndim):
-        return self.__loadw2vModel__("../state/external-models/glove.6B/w2v.glove.6B.{}.txt".format(ndim))
+        return self.__loadw2vModel__("../state/external-models/glove.6B/saved-{}.bin".format(ndim))
     
     def embeddingMatrix(self):
         availableWords = set.intersection(self.dictionary, set(self.embedding.vocab.keys()))

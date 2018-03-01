@@ -25,3 +25,5 @@ wget -O "/home/ubuntu/state/data/preprocessed-train-test/contest-test.csv" "http
 #wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.200.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.200.txt"
 #wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.6B.300.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.6B.300.txt"
 wget -O "/home/ubuntu/state/external-models/glove.6B/w2v.glove.840B.300d.txt" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/w2v.glove.840B.300d.txt"
+wget -O "/home/ubuntu/state/external-models/glove.6B/webcrawl.bin" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/webcrawl.bin"
+wget -O "/home/ubuntu/state/external-models/glove.6B/webcrawl.bin.vectors.npy" "https://s3-us-west-2.amazonaws.com/toxic-comment-classification/w2v-models/glove/webcrawl.bin.vectors.npy"
