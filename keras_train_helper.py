@@ -19,11 +19,12 @@ def rotateTensorboardLogs():
         shutil.move("./tb-logs", "./tb-logs-{}".format(copyEnding))
 
 class PrintAucCallback(Callback):
-    def __init__(self, sentences, labels, allTestDataPerEpochs=5, printPerBatches=None):
+    def __init__(self, sentences, labels, testBatchSize, allTestDataPerEpochs=5, printPerBatches=None):
         np.random.seed(64563)
         tenthOfCount = int(sentences.shape[0] / 5)
         
         self.testData = [sentences, labels]
+        self.testBatchSize = testBatchSize
 
         samples = np.random.choice(sentences.shape[0], tenthOfCount, replace=False)
         self.smallTestData = [sentences[samples], labels[samples]]
@@ -33,7 +34,7 @@ class PrintAucCallback(Callback):
 
     def computeAuc(self, smallTestSet=False):
         sentences, labels = self.smallTestData if smallTestSet else self.testData
-        predictions = self.model.predict(sentences)
+        predictions = self.model.predict(sentences, batch_size=self.testBatchSize)
         return roc_auc_score(labels[:, 1], predictions[:, 1])
         
     def printAuc(self, auc, smallTestSet=False):
