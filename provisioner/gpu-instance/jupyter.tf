@@ -3,6 +3,7 @@ variable "project_directory" {}
 variable "region" {}
 variable "vpc_id" {}
 variable "spot_price" {}
+variable "number_of_instances" {}
 
 provider "aws" {
   region = "${var.region}"
@@ -47,6 +48,7 @@ resource "aws_security_group" "allow_ssh" {
 
 resource "aws_spot_instance_request" "jupyter" {
   spot_price = "${var.spot_price}"
+  count = "${var.number_of_instances}"
 
   ami = "${data.aws_ami.deep_learning.id}"
   instance_type = "${var.instance_type}"
