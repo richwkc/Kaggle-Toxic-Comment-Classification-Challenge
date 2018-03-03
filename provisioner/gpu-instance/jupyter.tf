@@ -74,7 +74,7 @@ resource "aws_spot_instance_request" "jupyter" {
 
   provisioner "file" {
     source = "${var.project_directory}"
-    destination = "/home/ubuntu/toxic-comment-classification/"
+    destination = "/home/ubuntu/toxic-comment-classification/codebase/"
   }
 
   provisioner "file" {
