@@ -65,6 +65,8 @@ class Word2Vec:
     def embeddingMatrix(self):
         availableWords = set.intersection(self.dictionary, set(self.embedding.vocab.keys()))
         
+        assert len(availableWords) > 100000
+        
         int2vec = {index: self.embedding.word_vec(word) 
             if word in availableWords 
                 else np.random.normal(scale=.644, size=(self.dimensions,))
