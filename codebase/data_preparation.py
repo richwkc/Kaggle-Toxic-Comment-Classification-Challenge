@@ -5,9 +5,10 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.keyedvectors import KeyedVectors
 
+
 def loadData():
     print("Loading datasets...")
-    importDirectory = "../state/data/preprocessed-train-test/"
+    importDirectory = "../../state/data/preprocessed-train-test/"
 
     train, test, allData, contestTest = map(
         lambda filename: pd.read_csv(path.join(importDirectory, filename)), 
@@ -17,6 +18,7 @@ def loadData():
         train.shape, test.shape, allData.shape, contestTest.shape))
     
     return train, test, allData, contestTest
+
 
 class SentenceSplitter(BaseEstimator, TransformerMixin): 
     def __init__(self, column):
@@ -31,6 +33,7 @@ class SentenceSplitter(BaseEstimator, TransformerMixin):
             .str.replace("[^A-Za-z\s]", "")
             .str.lower()
             .str.split())
+
     
 class Word2Int(BaseEstimator, TransformerMixin):
     def __init__(self, completeDataset):
@@ -47,28 +50,17 @@ class Word2Int(BaseEstimator, TransformerMixin):
         print("Converting words to integers...")        
         return X.apply(lambda sentence: [self.w2i[word] for word in sentence])
 
+    
 class Word2Vec:
-    def __init__(self, embeddingName, i2w, seed=None):
+    def __init__(self, filepath, dimensions, i2w, seed=None):
         self.dictionary = set([word for word in i2w.values()])
         self.i2w = i2w
+        self.dimensions = dimensions
         if seed:
             np.random.seed(seed)
         
         print("Loading word2vec dictionary...")
-        if embeddingName == "webcrawl":
-            self.dimensions = 300
-            self.embedding = self.__loadw2vModel__("../state/external-models/glove.6B/webcrawl.bin")
-        elif embeddingName in [50, 100, 200, 300]:
-            self.dimensions = embeddingName
-            self.embedding = self.__loadGlovew2v__(embeddingName)
-        else:
-            raise "Invalid word embedding name"
-
-    def __loadw2vModel__(self, filepath):
-        return KeyedVectors.load(filepath, mmap="r")
-
-    def __loadGlovew2v__(self, ndim):
-        return self.__loadw2vModel__("../state/external-models/glove.6B/saved-{}.bin".format(ndim))
+        self.embedding = KeyedVectors.load(filepath, mmap="r")
     
     def embeddingMatrix(self):
         availableWords = set.intersection(self.dictionary, set(self.embedding.vocab.keys()))

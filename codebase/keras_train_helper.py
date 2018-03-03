@@ -27,19 +27,21 @@ def printAuc(auc, datasetName):
 
 
 class PrintAucCallback(Callback):
-    def __init__(self, train, test, batchSize, printFrequency=None):
+    def __init__(self, batchSize, printFrequency=None):
         np.random.seed(64563)
-
-        samples = np.random.choice(train[0].shape[0], int(train[0].shape[0] / 5), replace=False)
-        self.smallTrain = [train[0][samples], train[1][samples]]
-        self.train = train
-        self.test = test
+        
         self.batchSize = batchSize
         self.printPerBatches = math.ceil(1 / printFrequency)
         print(self.printPerBatches)
         self.listOfAucsTrain = []
         self.listOfAucsTest = []
 
+    def setDatasets(self, train, test):
+        samples = np.random.choice(train[0].shape[0], int(train[0].shape[0] / 5), replace=False)
+        self.smallTrain = [train[0][samples], train[1][samples]]
+        self.train = train
+        self.test = test
+        
     def __computeAuc__(self, dataset):
         sentences, labels = dataset
         predictions = self.model.predict(sentences, batch_size=self.batchSize)
@@ -56,10 +58,9 @@ class PrintAucCallback(Callback):
         self.listOfAucsTest.append((iterationType, count, testAuc))
 
     def on_batch_end(self, batch, logs={}):
-        print(batch + 1)
         if self.printPerBatches and (batch + 1) % self.printPerBatches == 0:
             self.__handleAuc__("batch", batch + 1, subsampleTrain=True)
 
     def on_epoch_end(self, epoch, logs={}):
-        self.__handleAuc__("epoch", epoch, subsampleTrain=True)
+        self.__handleAuc__("epoch", epoch + 1, subsampleTrain=True)
 
