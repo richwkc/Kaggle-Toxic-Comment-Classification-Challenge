@@ -8,7 +8,27 @@ import tensorflow as tf
 import numpy as np
 import os.path
 import math
+import matplotlib.pyplot as plt
 
+
+def getEpochIndices(listOfAucs):
+    return [index 
+            for index, (iterationType, number, value) 
+            in zip(range(len(listOfAucs)), listOfAucs)
+            if iterationType == "epoch"]
+
+
+def plotLearningCurve(listAucsTrain, listAucsTest):
+    plt.plot([value for _, key, value in listAucsTrain])
+    plt.plot([value for _, key, value in listAucsTest])
+
+    for index in getEpochIndices(listAucsTrain):
+        plt.axvline(index, ls="--", color="olive")
+
+    plt.legend(["train", "test"])
+    plt.ylabel("Area under ROC")
+    plt.xlabel("Epochs")
+    plt.show()
 
 def tfauc(y_true, y_pred):
      auc = tf.metrics.auc(y_true, y_pred)[1]
@@ -32,7 +52,6 @@ class PrintAucCallback(Callback):
         
         self.batchSize = batchSize
         self.printPerBatches = math.ceil(1 / printFrequency)
-        print(self.printPerBatches)
         self.listOfAucsTrain = []
         self.listOfAucsTest = []
 
@@ -63,4 +82,4 @@ class PrintAucCallback(Callback):
 
     def on_epoch_end(self, epoch, logs={}):
         self.__handleAuc__("epoch", epoch + 1, subsampleTrain=True)
-
+        plotLearningCurve(self.listOfAucsTrain, self.listOfAucsTest)
