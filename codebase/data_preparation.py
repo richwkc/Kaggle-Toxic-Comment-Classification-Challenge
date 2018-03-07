@@ -4,6 +4,8 @@ from os import path
 from sklearn.preprocessing import LabelEncoder
 from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.keyedvectors import KeyedVectors
+from sklearn.base import BaseEstimator, TransformerMixin
+import pickle
 
 
 def loadData():
@@ -20,6 +22,15 @@ def loadData():
     return train, test, allData, contestTest
 
 
+def loadObject(filepath):
+    with open(filepath, 'rb') as f:
+        return pickle.load(f)
+    
+    
+def loadWordEmbedding(filepath):
+    return KeyedVectors.load(filepath, mmap="r")
+
+
 class SentenceSplitter(BaseEstimator, TransformerMixin): 
     def __init__(self, column):
         self.column = column
@@ -34,6 +45,24 @@ class SentenceSplitter(BaseEstimator, TransformerMixin):
             .str.lower()
             .str.split())
 
+    
+class MissingWordsResolver(BaseEstimator, TransformerMixin): 
+    def __init__(self, resolver, missingWords):
+        self.resolver = resolver
+        self.missingWords = missingWords
+    
+    def fit(self):
+        return self
+    
+    def __resolveMissingWords__(self, words):
+        return [resolvedWord 
+                for word in words 
+                for resolvedWord in (self.resolver[word] if word in self.missingWords else [word])]
+    
+    def transform(self, X):
+        print("Resolving missing words...")        
+        return X.apply(self.__resolveMissingWords__)
+    
     
 class Word2Int(BaseEstimator, TransformerMixin):
     def __init__(self, completeDataset):
@@ -52,7 +81,7 @@ class Word2Int(BaseEstimator, TransformerMixin):
 
     
 class Word2Vec:
-    def __init__(self, filepath, dimensions, i2w, seed=None):
+    def __init__(self, wordEmbedding, dimensions, i2w, seed=None):
         self.dictionary = set([word for word in i2w.values()])
         self.i2w = i2w
         self.dimensions = dimensions
@@ -60,7 +89,7 @@ class Word2Vec:
             np.random.seed(seed)
         
         print("Loading word2vec dictionary...")
-        self.embedding = KeyedVectors.load(filepath, mmap="r")
+        self.embedding = wordEmbedding
     
     def embeddingMatrix(self):
         availableWords = set.intersection(self.dictionary, set(self.embedding.vocab.keys()))
