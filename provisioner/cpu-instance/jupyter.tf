@@ -2,6 +2,8 @@ variable "instance_type" {}
 variable "project_directory" {}
 variable "region" {}
 variable "vpc_id" {}
+variable "spot_price" {}
+variable "number_of_instances" {}
 
 provider "aws" {
   region = "${var.region}"
@@ -51,7 +53,10 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-resource "aws_instance" "jupyter" {
+resource "aws_spot_instance_request" "jupyter" {
+  spot_price = "${var.spot_price}"
+  count = "${var.number_of_instances}"
+
   ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "${var.instance_type}"
   key_name = "spark_key"
@@ -75,7 +80,7 @@ resource "aws_instance" "jupyter" {
 
   provisioner "file" {
     source = "${var.project_directory}"
-    destination = "/home/ubuntu/"
+    destination = "/home/ubuntu/toxic-comment-classification/codebase/"
   }
 
   provisioner "file" {
@@ -92,5 +97,5 @@ resource "aws_instance" "jupyter" {
 }
 
 output "ssh-and-forward-jupyter-notebook-port" {
-  value = "ssh -i ~/.ssh/spark_key.pem ubuntu@${aws_instance.jupyter.public_ip} -L 8888:localhost:8888"
+  value = "ssh -i ~/.ssh/spark_key.pem ubuntu@${aws_spot_instance_request.jupyter.public_ip} -L 8888:localhost:8888"
 }
