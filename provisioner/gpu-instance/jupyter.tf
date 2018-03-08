@@ -71,6 +71,13 @@ resource "aws_spot_instance_request" "jupyter" {
   tags {
     Name = "jupyter"
   }
+  
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir /home/ubuntu/toxic-comment-classification/",
+    ]
+  }
+
 
   provisioner "file" {
     source = "${var.project_directory}"
