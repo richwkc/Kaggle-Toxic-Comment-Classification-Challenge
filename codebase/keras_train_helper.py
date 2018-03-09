@@ -11,6 +11,18 @@ import math
 import matplotlib.pyplot as plt
 
 
+def tfauc(y_true, y_pred):
+     auc = tf.metrics.auc(y_true, y_pred)[1]
+     K.get_session().run(tf.local_variables_initializer())
+     return auc
+
+
+def rotateTensorboardLogs():
+    if os.path.isdir("./tb-logs"):
+        copyEnding = re.sub(r"[\s\:\.]", "-", str(datetime.datetime.now()))
+        shutil.move("./tb-logs", "./tb-logs-{}".format(copyEnding))
+
+
 def getEpochIndices(listOfAucs):
     return [index 
             for index, (iterationType, number, value) 
@@ -28,19 +40,8 @@ def plotLearningCurve(listAucsTrain, listAucsTest):
     plt.legend(["train", "test"])
     plt.ylabel("Area under ROC")
     plt.xlabel("Epochs")
-    plt.show()
-
-def tfauc(y_true, y_pred):
-     auc = tf.metrics.auc(y_true, y_pred)[1]
-     K.get_session().run(tf.local_variables_initializer())
-     return auc
-
-
-def rotateTensorboardLogs():
-    if os.path.isdir("./tb-logs"):
-        copyEnding = re.sub(r"[\s\:\.]", "-", str(datetime.datetime.now()))
-        shutil.move("./tb-logs", "./tb-logs-{}".format(copyEnding))
-
+    plt.show() 
+        
 
 def printAuc(auc, datasetName):
     print(" - {} auc: {:.4f}".format(datasetName, auc))
