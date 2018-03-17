@@ -6,6 +6,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.keyedvectors import KeyedVectors
 from sklearn.base import BaseEstimator, TransformerMixin
 import pickle
+from sklearn.feature_extraction import stop_words
 
 
 def loadData():
@@ -45,6 +46,15 @@ class SentenceSplitter(BaseEstimator, TransformerMixin):
             .str.lower()
             .str.split())
 
+
+class StopwordsRemover(BaseEstimator, TransformerMixin): 
+    def fit(self):
+        return self
+    
+    def transform(self, X):
+        print("Removing stopwords...")        
+        return X.transform(lambda x: [w for w in x if w not in stop_words.ENGLISH_STOP_WORDS])
+    
     
 class MissingWordsResolver(BaseEstimator, TransformerMixin): 
     def __init__(self, resolver, missingWords):
