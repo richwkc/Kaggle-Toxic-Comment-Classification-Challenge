@@ -79,8 +79,8 @@ class Word2Int(BaseEstimator, TransformerMixin):
         print("Loading w2i and i2w dictionaries...")
         self.allWords = set([word for sentence in completeDataset for word in sentence])
 
-        self.w2i = { word: index for index, word in enumerate(self.allWords) }
-        self.i2w = { index: word for index, word in enumerate(self.allWords) }
+        self.w2i = { word: index for index, word in enumerate(self.allWords, 1) }
+        self.i2w = { index: word for index, word in enumerate(self.allWords, 1) }
         
     def fit(self):
         return self    
@@ -111,7 +111,9 @@ class Word2Vec:
                 else np.random.normal(scale=.644, size=(self.dimensions,))
             for index, word in self.i2w.items()}
         
-        matrix = np.array([vector for vector in int2vec.values()])
+        int2vec[0] = np.zeros((self.dimensions,))
+        
+        matrix = np.array([int2vec[i] for i in range(len(int2vec))])
         
         return matrix, int2vec
     
